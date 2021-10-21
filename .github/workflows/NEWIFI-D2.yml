@@ -44,6 +44,7 @@ jobs:
           git pull
           git branch -a
           git checkout origin/openwrt-21.02 -b openwrt-21.02
+          cd ..
           mv ./openwrt/* ./
       - name: Install addons
         run: |
