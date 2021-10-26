@@ -63,6 +63,7 @@ jobs:
           rm -f ./.config*
           touch ./.config
           cat >> .config <<EOF
+          # custom
           CONFIG_MODULES=y
           CONFIG_HAVE_DOT_CONFIG=y
           CONFIG_TARGET_ramips=y
@@ -825,7 +826,9 @@ jobs:
           CONFIG_PACKAGE_libjson-script=y
           CONFIG_STRACE_NONE=y
           CONFIG_PACKAGE_ubi-utils=y
-          EOF    
+          
+          EOF
+          
           make defconfig
       - name: Download package source code
         run: |
