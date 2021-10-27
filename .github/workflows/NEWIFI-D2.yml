@@ -63,7 +63,7 @@ jobs:
           rm -f ./.config*
           touch ./.config
           cat >> .config <<EOF
-          # custom
+          
           CONFIG_MODULES=y
           CONFIG_HAVE_DOT_CONFIG=y
           CONFIG_TARGET_ramips=y
@@ -230,7 +230,7 @@ jobs:
           CONFIG_IMAGEOPT=y
           CONFIG_PREINITOPT=y
           CONFIG_TARGET_PREINIT_SUPPRESS_STDERR=y
-          CONFIG_TARGET_PREINIT_TIMEOUT=10
+          CONFIG_TARGET_PREINIT_TIMEOUT=2
           CONFIG_TARGET_PREINIT_IFNAME="lan"
           CONFIG_TARGET_PREINIT_IP="10.10.10.1"
           CONFIG_TARGET_PREINIT_NETMASK="255.255.255.0"
@@ -826,6 +826,7 @@ jobs:
           CONFIG_PACKAGE_libjson-script=y
           CONFIG_STRACE_NONE=y
           CONFIG_PACKAGE_ubi-utils=y
+
           
           EOF
           
