@@ -43,7 +43,8 @@ jobs:
           cd openwrt
           git pull
           git branch -a
-          git checkout v21.02.0
+          LatestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          git checkout $LatestTag
           cd ..
           mv ./openwrt/* ./
       - name: Install addons
@@ -63,7 +64,7 @@ jobs:
           rm -f ./.config*
           touch ./.config
           cat >> .config <<EOF
-          
+
           CONFIG_MODULES=y
           CONFIG_HAVE_DOT_CONFIG=y
           CONFIG_TARGET_ramips=y
@@ -200,7 +201,6 @@ jobs:
           CONFIG_KERNEL_STACKPROTECTOR=y
           CONFIG_PKG_FORTIFY_SOURCE_1=y
           CONFIG_PKG_RELRO_FULL=y
-          CONFIG_DEVEL=y
           CONFIG_BINARY_FOLDER=""
           CONFIG_DOWNLOAD_FOLDER=""
           CONFIG_LOCALMIRROR=""
@@ -212,11 +212,9 @@ jobs:
           CONFIG_KERNEL_GIT_CLONE_URI=""
           CONFIG_BUILD_LOG_DIR=""
           CONFIG_EXTRA_OPTIMIZATION="-fno-caller-saves -fno-plt"
-          CONFIG_TARGET_OPTIONS=y
           CONFIG_TARGET_OPTIMIZATION="-Os -pipe -mno-branch-likely -mips32r2 -mtune=24kc"
           CONFIG_SOFT_FLOAT=y
           CONFIG_USE_MIPS16=y
-          CONFIG_NEED_TOOLCHAIN=y
           CONFIG_EXTRA_BINUTILS_CONFIG_OPTIONS=""
           CONFIG_EXTRA_GCC_CONFIG_OPTIONS=""
           CONFIG_GDB=y
@@ -240,11 +238,7 @@ jobs:
           CONFIG_TARGET_INIT_ENV=""
           CONFIG_TARGET_INIT_CMD="/sbin/init"
           CONFIG_TARGET_INIT_SUPPRESS_STDERR=y
-          CONFIG_PER_FEED_REPO=y
-          CONFIG_FEED_packages=y
-          CONFIG_FEED_luci=y
-          CONFIG_FEED_routing=y
-          CONFIG_FEED_telephony=y
+          CONFIG_PACKAGE_attendedsysupgrade-common=m
           CONFIG_PACKAGE_base-files=y
           CONFIG_PACKAGE_busybox=y
           CONFIG_BUSYBOX_DEFAULT_HAVE_DOT_CONFIG=y
@@ -585,6 +579,7 @@ jobs:
           CONFIG_PACKAGE_rpcd=y
           CONFIG_PACKAGE_rpcd-mod-file=y
           CONFIG_PACKAGE_rpcd-mod-iwinfo=y
+          CONFIG_PACKAGE_rpcd-mod-rpcsys=m
           CONFIG_PACKAGE_ubox=y
           CONFIG_PACKAGE_ubus=y
           CONFIG_PACKAGE_ubusd=y
@@ -599,6 +594,7 @@ jobs:
           CONFIG_PACKAGE_kmod-leds-gpio=y
           CONFIG_PACKAGE_kmod-lib-crc-ccitt=y
           CONFIG_PACKAGE_kmod-nls-base=y
+          CONFIG_PACKAGE_kmod-nls-cp936=y
           CONFIG_PACKAGE_kmod-ip6tables=y
           CONFIG_PACKAGE_kmod-ipt-conntrack=y
           CONFIG_PACKAGE_kmod-ipt-core=y
@@ -723,7 +719,9 @@ jobs:
           CONFIG_PACKAGE_luci-mod-network=y
           CONFIG_PACKAGE_luci-mod-status=y
           CONFIG_PACKAGE_luci-mod-system=y
-          CONFIG_PACKAGE_luci-app-banip=y
+          CONFIG_PACKAGE_luci-app-adblock=m
+          CONFIG_PACKAGE_luci-app-advanced-reboot=m
+          CONFIG_PACKAGE_luci-app-attendedsysupgrade=m
           CONFIG_PACKAGE_luci-app-bypass_INCLUDE_Shadowsocks_Libev_Client=y
           CONFIG_PACKAGE_luci-app-bypass_INCLUDE_ShadowsocksR_Libev_Client=y
           CONFIG_PACKAGE_luci-app-bypass_INCLUDE_Shadowsocks_Libev_Server=y
@@ -735,7 +733,6 @@ jobs:
           CONFIG_PACKAGE_luci-app-bypass_INCLUDE_Socks5_Proxy=y
           CONFIG_PACKAGE_luci-app-bypass_INCLUDE_Socks_Server=y
           CONFIG_PACKAGE_luci-app-firewall=y
-          CONFIG_PACKAGE_luci-app-ledtrig-switch=y
           CONFIG_PACKAGE_luci-app-opkg=y
           CONFIG_PACKAGE_luci-app-passwall=y
           CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ChinaDNS_NG=y
@@ -744,11 +741,10 @@ jobs:
           CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Client=y
           CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Simple_Obfs=y
           CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_Plus=y
-          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray=y
           CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Plugin=y
           CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray=y
+          CONFIG_PACKAGE_luci-app-smartdns=y
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_ShadowsocksR_Libev_Client=y
-          CONFIG_PACKAGE_luci-app-vlmcsd=y
           CONFIG_PACKAGE_luci-theme-bootstrap=y
           CONFIG_PACKAGE_luci-proto-ipv6=y
           CONFIG_PACKAGE_luci-proto-ppp=y
@@ -757,11 +753,14 @@ jobs:
           CONFIG_PACKAGE_luci-lib-jsonc=y
           CONFIG_PACKAGE_luci-lib-nixio=y
           CONFIG_PACKAGE_luci-lib-nixio_notls=y
-          CONFIG_PACKAGE_luci-i18n-banip-zh-cn=y
+          CONFIG_PACKAGE_luci-i18n-adblock-zh-cn=m
+          CONFIG_PACKAGE_luci-i18n-advanced-reboot-zh-cn=m
+          CONFIG_PACKAGE_luci-i18n-attendedsysupgrade-zh-cn=m
           CONFIG_PACKAGE_luci-i18n-base-zh-cn=y
           CONFIG_PACKAGE_luci-i18n-firewall-zh-cn=y
           CONFIG_PACKAGE_luci-i18n-opkg-zh-cn=y
           CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
+          CONFIG_PACKAGE_luci-i18n-smartdns-zh-cn=y
           CONFIG_POSTFIX_TLS=y
           CONFIG_POSTFIX_SASL=y
           CONFIG_POSTFIX_LDAP=y
@@ -793,7 +792,7 @@ jobs:
           CONFIG_DRIVER_11N_SUPPORT=y
           CONFIG_DRIVER_11AC_SUPPORT=y
           CONFIG_PACKAGE_wpad-basic-wolfssl=y
-          CONFIG_PACKAGE_banip=y
+          CONFIG_PACKAGE_adblock=m
           CONFIG_PACKAGE_chinadns-ng=y
           CONFIG_GOST_COMPRESS_UPX=y
           CONFIG_PACKAGE_ipset=y
@@ -806,27 +805,25 @@ jobs:
           CONFIG_PACKAGE_ppp=y
           CONFIG_PACKAGE_ppp-mod-pppoe=y
           CONFIG_PACKAGE_simple-obfs=y
+          CONFIG_PACKAGE_smartdns=y
           CONFIG_PACKAGE_tcping=y
           CONFIG_PACKAGE_trojan-plus=y
           CONFIG_PACKAGE_uclient-fetch=y
-          CONFIG_PACKAGE_v2ray-core=y
-          CONFIG_V2RAY_CORE_COMPRESS_UPX=y
           CONFIG_PACKAGE_v2ray-plugin=y
           CONFIG_v2ray-plugin_COMPRESS_UPX=y
-          CONFIG_PACKAGE_vlmcsd=y
           CONFIG_PACKAGE_xray-core=y
           CONFIG_XRAY_PLUGIN_COMPRESS_UPX=y
           CONFIG_PACKAGE_unzip=y
           CONFIG_PACKAGE_coreutils=y
           CONFIG_PACKAGE_coreutils-base64=y
           CONFIG_PACKAGE_coreutils-nohup=y
+          CONFIG_PACKAGE_coreutils-sort=m
           CONFIG_FILEBROWSER_COMPRESS_UPX=y
           CONFIG_PACKAGE_iwinfo=y
           CONFIG_PACKAGE_jshn=y
           CONFIG_PACKAGE_libjson-script=y
           CONFIG_STRACE_NONE=y
           CONFIG_PACKAGE_ubi-utils=y
-
           
           EOF
           
